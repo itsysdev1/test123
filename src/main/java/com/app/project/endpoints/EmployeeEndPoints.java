@@ -1,9 +1,9 @@
-package com.app.demo.endpoints;
+package com.app.project.endpoints;
 
-import com.app.demo.model.CommonResponse;
-import com.app.demo.model.GetEmpData;
-import com.app.demo.service.EmployeeService;
-import com.app.demo.util.ServiceHelper;
+import com.app.project.model.CommonResponse;
+import com.app.project.model.GetEmpData;
+import com.app.project.service.EmployeeService;
+import com.app.project.util.ServiceHelper;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1")
 public class EmployeeEndPoints {
 
+    private final EmployeeService employeeService;
+
     @Autowired
-    private EmployeeService employeeService;
+    public EmployeeEndPoints(EmployeeService employeeService){
+        this.employeeService = employeeService;
+    }
 
     @GetMapping("/employees")
     public ResponseEntity<CommonResponse> getEmployee(){
@@ -41,19 +45,19 @@ public class EmployeeEndPoints {
         }
     }
 
-    @GetMapping("/getEmpById")
-    public ResponseEntity<CommonResponse> getEmployeeById(@RequestBody GetEmpData getEmpData){
+    @GetMapping("/employee/{emp_ID}")
+    public ResponseEntity<CommonResponse> getEmployeeById(@PathVariable String emp_ID ){
         ThreadContext.put("req_id", ServiceHelper.getUUID());
-        log.debug("getEmpData:{}",ServiceHelper.convertToJson(getEmpData));
+        log.debug("getEmpData:{}",ServiceHelper.convertToJson(emp_ID));
 
         CommonResponse commonResponse = new CommonResponse();
 
         try {
-            commonResponse = employeeService.getEmployeeById(getEmpData);
+            commonResponse = employeeService.getEmployeeById(emp_ID);
             log.debug("CommonResponse:{}",ServiceHelper.convertToJson(commonResponse));
             return ResponseEntity.ok().body(commonResponse);
         }catch (Exception e){
-            commonResponse.setPayload(getEmpData);
+            commonResponse.setPayload(e);
             commonResponse.setStatusCode("002");
             commonResponse.setStatusDescription("General Error");
             log.debug("CommonResponse:{}",ServiceHelper.convertToJson(commonResponse));
@@ -64,7 +68,7 @@ public class EmployeeEndPoints {
         }
     }
 
-    @PostMapping("/createEmp")
+    @PostMapping("/employee")
     public ResponseEntity<CommonResponse> createEmployee(@RequestBody GetEmpData getEmpData){
         ThreadContext.put("req_id", ServiceHelper.getUUID());
         log.debug("getEmpData:{}",ServiceHelper.convertToJson(getEmpData));
@@ -86,21 +90,21 @@ public class EmployeeEndPoints {
         }
     }
 
-    @PostMapping("/deleteEmp")
-    public ResponseEntity<CommonResponse> deleteEmployee(@RequestBody GetEmpData getEmpData){
+    @PostMapping("/employee/delete/{emp_ID}")
+    public ResponseEntity<CommonResponse> deleteEmployee(@PathVariable String emp_ID){
         ThreadContext.put("req_id", ServiceHelper.getUUID());
-        log.debug("getEmpData:{}",ServiceHelper.convertToJson(getEmpData.getEmpId()));
+        log.debug("getEmpData:{}",ServiceHelper.convertToJson(emp_ID));
 
         CommonResponse commonResponse = new CommonResponse();
 
         try {
-            commonResponse = employeeService.deleteEmployee(getEmpData);
+            commonResponse = employeeService.deleteEmployee(emp_ID);
             log.debug("CommonResponse:{}",ServiceHelper.convertToJson(commonResponse));
             return ResponseEntity.ok().body(commonResponse);
         }catch (Exception e){
             commonResponse.setStatusCode("002");
             commonResponse.setStatusDescription("General Error");
-            commonResponse.setPayload(getEmpData);
+            commonResponse.setPayload(emp_ID);
             log.debug("CommonResponse:{}",ServiceHelper.convertToJson(commonResponse));
             return ResponseEntity.internalServerError().body(commonResponse);
         } finally {
@@ -108,21 +112,21 @@ public class EmployeeEndPoints {
         }
     }
 
-    @PostMapping("/updateEmp")
-    public ResponseEntity<CommonResponse> updateEmployee(@RequestBody GetEmpData getEmpData){
+    @PostMapping("/employee/{emp_ID}")
+    public ResponseEntity<CommonResponse> updateEmployee(@PathVariable String emp_ID, @RequestBody GetEmpData empData){
         ThreadContext.put("req_id", ServiceHelper.getUUID());
-        log.debug("getEmpData:{}",ServiceHelper.convertToJson(getEmpData.getEmpId()));
+        log.debug("getEmpData:{}{}",ServiceHelper.convertToJson(emp_ID),ServiceHelper.convertToJson(empData));
 
         CommonResponse commonResponse = new CommonResponse();
 
         try {
-            commonResponse = employeeService.updateEmployee(getEmpData);
+            commonResponse = employeeService.updateEmployee(emp_ID, empData);
             log.debug("CommonResponse:{}",ServiceHelper.convertToJson(commonResponse));
             return ResponseEntity.ok().body(commonResponse);
         }catch (Exception e){
             commonResponse.setStatusCode("002");
             commonResponse.setStatusDescription("General Error");
-            commonResponse.setPayload(getEmpData);
+            commonResponse.setPayload(emp_ID);
             log.debug("CommonResponse:{}",ServiceHelper.convertToJson(commonResponse));
             return ResponseEntity.internalServerError().body(commonResponse);
         } finally {
@@ -130,25 +134,7 @@ public class EmployeeEndPoints {
         }
     }
 
-    @GetMapping("/getDependentsByID/{emp_ID}")
-    public ResponseEntity<CommonResponse> getDependentsByEmpId(@PathVariable("emp_ID") String empId){
-        ThreadContext.put("req_id", ServiceHelper.getUUID());
-        log.debug("EmpID:{}",ServiceHelper.convertToJson(empId));
 
-        CommonResponse commonResponse = new CommonResponse();
-
-        try {
-            commonResponse = employeeService.getDependentsByEmpId(empId);
-            return ResponseEntity.ok().body(commonResponse);
-        }catch (Exception e){
-            commonResponse.setStatusCode("002");
-            commonResponse.setStatusDescription("General Error");
-            commonResponse.setPayload(empId);
-            return ResponseEntity.internalServerError().body(commonResponse);
-        } finally {
-            ThreadContext.clearMap();
-        }
-    }
 
 
 }

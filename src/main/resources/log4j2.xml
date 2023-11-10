@@ -39,7 +39,7 @@
     </Appenders>
 
     <Loggers>
-        <AsyncLogger name="com.app.demo" level="debug" includeLocation="true" additivity="false">
+        <AsyncLogger name="com.app.project" level="debug" includeLocation="true" additivity="false">
             <AppenderRef ref="pattern-console-color"/>
             <AppenderRef ref="log-file-trace"/>
         </AsyncLogger>

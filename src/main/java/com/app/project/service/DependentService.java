@@ -1,12 +1,12 @@
-package com.app.demo.service;
+package com.app.project.service;
 
-import com.app.demo.model.CommonResponse;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.http.ResponseEntity;
+import com.app.project.model.CommonResponse;
 import org.springframework.stereotype.Component;
 
 @Component
 public interface DependentService {
 
     public CommonResponse getDependents() throws Exception;
+
+    public CommonResponse getDependentsByEmpId (String EmpId) throws Exception;
 }

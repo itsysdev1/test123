@@ -1,7 +1,7 @@
-package com.app.demo.entity;
+package com.app.project.entity;
 
 import lombok.Data;
-import org.hibernate.engine.internal.Cascade;
+
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,7 +27,7 @@ public class Dependent implements Serializable {
 
 
     //Employee_ID
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Employee_ID")
     private Employee employee;
 

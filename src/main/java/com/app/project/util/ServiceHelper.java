@@ -1,4 +1,4 @@
-package com.app.demo.util;
+package com.app.project.util;
 
 import com.google.gson.Gson;
 import java.util.UUID;
@@ -14,4 +14,5 @@ public class ServiceHelper {
     public static String convertToJson(Object object){
         return new Gson().toJson(object);
     }
+
 }

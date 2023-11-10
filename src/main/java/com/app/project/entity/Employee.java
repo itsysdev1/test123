@@ -1,4 +1,4 @@
-package com.app.demo.entity;
+package com.app.project.entity;
 
 import lombok.Data;
 
@@ -34,6 +34,6 @@ public class Employee implements Serializable {
     @Column(name = "EMPLOYEE_SALARY")
     private int empSalary;
 
-   /*@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    private List<Dependent> dependents;*/
+  @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Dependent> dependents;
 }

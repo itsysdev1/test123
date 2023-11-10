@@ -1,14 +1,13 @@
-package com.app.demo.service.impl;
+package com.app.project.service.impl;
 
-import com.app.demo.entity.Dependent;
-import com.app.demo.entity.Employee;
-import com.app.demo.model.CommonResponse;
-import com.app.demo.model.GetEmpData;
-import com.app.demo.repo.DepRepo;
-import com.app.demo.repo.EmpRepo;
-import com.app.demo.service.EmployeeService;
-import com.app.demo.util.SequenceGenerator;
-import com.app.demo.util.ServiceHelper;
+import com.app.project.entity.Employee;
+import com.app.project.model.CommonResponse;
+import com.app.project.model.GetEmpData;
+import com.app.project.repo.DepRepo;
+import com.app.project.repo.EmpRepo;
+import com.app.project.service.EmployeeService;
+import com.app.project.util.SequenceGenerator;
+import com.app.project.util.ServiceHelper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public CommonResponse getEmployee() throws Exception{
-        log.debug("START | getEmployees:");
+        log.debug("START | getEmployee:");
         CommonResponse commonResponse = new CommonResponse();
 
         try {
@@ -48,18 +47,18 @@ public class EmployeeServiceImpl implements EmployeeService {
             log.error("Exception:{}",e.getClass());
             throw new Exception(e.getMessage());
     }
-        log.debug("END | CommonResponse:{}",ServiceHelper.convertToJson(commonResponse));
+        log.debug("END | getEmployee,CommonResponse:{}",ServiceHelper.convertToJson(commonResponse));
         return commonResponse;
     }
 
     @Override
-    public CommonResponse getEmployeeById(GetEmpData getEmpData) throws Exception{
-        log.debug("START | getEmployeeById,getEmpData:{}",getEmpData.getEmpId());
+    public CommonResponse getEmployeeById(String employee_ID) throws Exception{
+        log.debug("START | getEmployeeById,getEmpData:{}",employee_ID);
         CommonResponse commonResponse = new CommonResponse();
 
         try {
 
-            Optional<Employee> employee = empRepo.findById(getEmpData. getEmpId());
+            Optional<Employee> employee = empRepo.findById(employee_ID);
             if (employee.isPresent()) {
                 commonResponse.setStatusCode("000");
                 commonResponse.setStatusDescription("Success");
@@ -68,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             } else {
                 commonResponse.setStatusCode("005");
                 commonResponse.setStatusDescription("No Employee Record Found");
-                commonResponse.setPayload(getEmpData);
+                commonResponse.setPayload(employee_ID);
             }
 
         }catch (Exception e){
@@ -112,15 +111,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public CommonResponse deleteEmployee(GetEmpData getEmpData) throws Exception{
-        log.debug("START | deleteEmployee,getEmpData:{}",getEmpData.getEmpId());
+    public CommonResponse deleteEmployee(String employee_ID) throws Exception{
+        log.debug("START | deleteEmployee,getEmpData:{}",employee_ID);
         CommonResponse commonResponse = new CommonResponse();
 
         try {
 
-            Optional<Employee> employee = empRepo.findById(getEmpData. getEmpId());
+            Optional<Employee> employee = empRepo.findById(employee_ID);
             if (employee.isPresent()) {
-                empRepo.deleteById(getEmpData.getEmpId());
+                empRepo.deleteById(employee_ID);
                 commonResponse.setStatusCode("000");
                 commonResponse.setStatusDescription("Employee Deleted Successfully");
                 commonResponse.setPayload(employee.get());
@@ -128,7 +127,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             } else {
                 commonResponse.setStatusCode("005");
                 commonResponse.setStatusDescription("No Employee Record Found");
-                commonResponse.setPayload(getEmpData);                               // see
+                commonResponse.setPayload(employee_ID);                               // see
             }
 
         }catch (Exception e){
@@ -141,16 +140,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public CommonResponse updateEmployee(GetEmpData getEmpData) throws Exception{
-        log.debug("START | updateEmployee,getEmpData:{}",getEmpData.getEmpId());
+    public CommonResponse updateEmployee(String employee_ID, GetEmpData getEmpData) throws Exception{
+        log.debug("START | updateEmployee,getEmpData:{}{}",employee_ID, getEmpData);
 
         CommonResponse commonResponse = new CommonResponse();
         Employee employee = new Employee();
         try {
-            Optional<Employee> isEmployee = empRepo.findById(getEmpData. getEmpId());
-            if(isEmployee.isPresent()) {
+            Optional<Employee> isEmployee = empRepo.findById(employee_ID);
 
-                employee.setEmpId(getEmpData.getEmpId());
+            if(isEmployee.isPresent()) {
+                employee.setEmpId(employee_ID);
                 employee.setEmpNIC(getEmpData.getEmpNIC());
                 employee.setEmpName(getEmpData.getEmpName());
                 employee.setEmpAge(getEmpData.getEmpAge());
@@ -176,30 +175,5 @@ public class EmployeeServiceImpl implements EmployeeService {
         return commonResponse;
     }
 
-    @Override
-    public CommonResponse getDependentsByEmpId(String empID){
-        log.debug("START | getEmpId,EmpID:{}",empID);
-        CommonResponse commonResponse = new CommonResponse();
 
-        try {
-
-            /*List<Dependent> dependent = depRepo.findByEmpID(empID);
-            if (dependent.isPresent()) {
-                commonResponse.setStatusCode("000");
-                commonResponse.setStatusDescription("Employee Successfully");
-                commonResponse.setPayload(dependent);
-/*
-            } else {
-                commonResponse.setStatusCode("005");
-                commonResponse.setStatusDescription("No Employee Record Found");
-                commonResponse.setPayload(empID);
-            }*/
-
-        }catch (Exception e){
-            log.debug("Exception:{}",e.getMessage());
-            log.debug("Exception:{}",e.getMessage());
-        }
-        log.debug("END | EmployeeDetails:{}", ServiceHelper.convertToJson(commonResponse));
-        return commonResponse;
-    }
 }

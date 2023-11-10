@@ -1,11 +1,8 @@
-package com.app.demo.repo;
+package com.app.project.repo;
 
-import com.app.demo.entity.Dependent;
-import com.app.demo.entity.Employee;
+import com.app.project.entity.Dependent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface DepRepo extends JpaRepository<Dependent,String> {
