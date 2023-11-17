@@ -9,10 +9,12 @@ import java.util.List;
 
 @Entity
 @Data
+
 @Table(name = "Employee_Nipun")
 public class Employee implements Serializable {
 
     @Id
+      //@GeneratedValue(strategy = GenerationType.IDENTITY)   --> we cant use this for the employee entity class. if we use this employee id will be null.(general error)
     @Column(name = "EMPLOYEE_ID")
     private String empId;
 
@@ -34,6 +36,9 @@ public class Employee implements Serializable {
     @Column(name = "EMPLOYEE_SALARY")
     private int empSalary;
 
-  @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Dependent> dependents;
+
+    //Dependent_ID
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "DEPENDENT_ID")
+    private Dependent dependent;
 }

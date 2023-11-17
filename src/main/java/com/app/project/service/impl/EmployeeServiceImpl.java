@@ -19,10 +19,15 @@ import java.util.Optional;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+
+    private final EmpRepo empRepo;
+    private final DepRepo depRepo;
+
     @Autowired
-    private EmpRepo empRepo;
-    @Autowired
-    private DepRepo depRepo;
+    public EmployeeServiceImpl(EmpRepo empRepo, DepRepo depRepo){
+        this.empRepo = empRepo;
+        this.depRepo = depRepo;
+    }
 
     @Override
     public CommonResponse getEmployee() throws Exception{
@@ -94,16 +99,16 @@ public class EmployeeServiceImpl implements EmployeeService {
             employee.setEmpGender(getEmpData.getEmpGender());
             employee.setEmpAddress(getEmpData.getEmpAddress());
             employee.setEmpSalary(getEmpData.getEmpSalary());
+            employee.setDependent(getEmpData.getDependent());
 
             Employee dbEmployee = empRepo.save(employee);
-
                 commonResponse.setStatusCode("000");
                 commonResponse.setStatusDescription("Employee Created Successfully");
                 commonResponse.setPayload(dbEmployee);
 
         }catch (Exception e){
-            log.error("Exception:{}",e.getMessage());
-            log.error("Exception:{}",e.getClass());
+            log.error("Exception,getMessage:{}",e.getMessage());
+            log.error("Exception,getClass:{}",e.getClass());
             throw new Exception(e.getMessage());
         }
         log.debug("END | createEmployee,commonResponse:{}", ServiceHelper.convertToJson(commonResponse));
@@ -112,7 +117,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public CommonResponse deleteEmployee(String employee_ID) throws Exception{
-        log.debug("START | deleteEmployee,getEmpData:{}",employee_ID);
+        log.debug("START | deleteEmployee,getEmpID:{}",employee_ID);
         CommonResponse commonResponse = new CommonResponse();
 
         try {
@@ -141,7 +146,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public CommonResponse updateEmployee(String employee_ID, GetEmpData getEmpData) throws Exception{
-        log.debug("START | updateEmployee,getEmpData:{}{}",employee_ID, getEmpData);
+        log.debug("START | updateEmployee,getEmpID:{} getEmpData:{}",employee_ID, getEmpData);
 
         CommonResponse commonResponse = new CommonResponse();
         Employee employee = new Employee();
@@ -156,6 +161,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.setEmpGender(getEmpData.getEmpGender());
                 employee.setEmpAddress(getEmpData.getEmpAddress());
                 employee.setEmpSalary(getEmpData.getEmpSalary());
+                employee.setDependent(getEmpData.getDependent());
 
                 Employee dbEmployee = empRepo.save(employee);
                 commonResponse.setStatusCode("000");
@@ -174,6 +180,5 @@ public class EmployeeServiceImpl implements EmployeeService {
         log.debug("END | updateEmployee,commonResponse:{}", ServiceHelper.convertToJson(commonResponse));
         return commonResponse;
     }
-
 
 }

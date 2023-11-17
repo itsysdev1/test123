@@ -17,11 +17,15 @@ import java.util.Optional;
 @Log4j2
 @Service
 public class DependentServiceImpl implements DependentService {
-    @Autowired
-    DepRepo depRepo;
+
+    private final EmpRepo empRepo;
+    private final DepRepo depRepo;
 
     @Autowired
-    EmpRepo empRepo;
+    public DependentServiceImpl(EmpRepo empRepo, DepRepo depRepo){
+        this.empRepo = empRepo;
+        this.depRepo = depRepo;
+    }
 
     @Override
     public CommonResponse getDependents() throws Exception{
@@ -59,7 +63,7 @@ public class DependentServiceImpl implements DependentService {
                 commonResponse.setStatusCode("000");
                 commonResponse.setStatusDescription("Employee has Dependent");
                 Employee employee = optionalEmployee.get();
-                commonResponse.setPayload(employee.getDependents());
+                commonResponse.setPayload(employee.getDependent());
 
             } else {
                 commonResponse.setStatusCode("005");

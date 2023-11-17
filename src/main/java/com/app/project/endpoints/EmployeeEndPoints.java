@@ -115,7 +115,7 @@ public class EmployeeEndPoints {
     @PostMapping("/employee/{emp_ID}")
     public ResponseEntity<CommonResponse> updateEmployee(@PathVariable String emp_ID, @RequestBody GetEmpData empData){
         ThreadContext.put("req_id", ServiceHelper.getUUID());
-        log.debug("getEmpData:{}{}",ServiceHelper.convertToJson(emp_ID),ServiceHelper.convertToJson(empData));
+        log.debug("getEmpID:{} getEmpData:{}",ServiceHelper.convertToJson(emp_ID),ServiceHelper.convertToJson(empData));
 
         CommonResponse commonResponse = new CommonResponse();
 

@@ -1,5 +1,6 @@
 package com.app.project.model;
 
+import com.app.project.entity.Dependent;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,7 +16,7 @@ public class GetEmpData implements Serializable {
     private String empGender;
     private String empAddress;
     private int empSalary;
-    private List<String> dependent;
+    private Dependent dependent;
 
 
 

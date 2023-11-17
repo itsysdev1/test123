@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class Dependent implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DEPENDENT_ID")
     private String depId;
 
@@ -26,10 +26,7 @@ public class Dependent implements Serializable {
     private String depGender;
 
 
-    //Employee_ID
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Employee_ID")
-    private Employee employee;
+
 
 
 }
