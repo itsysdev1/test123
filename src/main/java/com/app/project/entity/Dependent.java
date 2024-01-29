@@ -25,6 +25,8 @@ public class Dependent implements Serializable {
     @Column(name = "DEPENDENT_GENDER")
     private String depGender;
 
+    private String testdepGender;
+
 
 
 
